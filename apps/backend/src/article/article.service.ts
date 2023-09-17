@@ -8,6 +8,7 @@ import { Article } from './article.entity';
 import { IArticleRO, IArticlesRO, ICommentsRO } from './article.interface';
 import { Comment } from './comment.entity';
 import { CreateArticleDto, CreateCommentDto } from './dto';
+import { Tag } from '../tag/tag.entity';
 
 @Injectable()
 export class ArticleService {
@@ -153,14 +154,20 @@ export class ArticleService {
       { id: userId },
       { populate: ['followers', 'favorites', 'articles'] },
     );
+
     const article = new Article(user!, dto.title, dto.description, dto.body);
+
+    for (const tag of dto.tagList) {
+      // Upsert operation to add the tag to the tag table if it doesn't already exist
+      await this.em.upsert(Tag, { tag });
+    }
+
     article.tagList.push(...dto.tagList);
     user?.articles.add(article);
     await this.em.flush();
 
     return { article: article.toJSON(user!) };
   }
-
   async update(userId: number, slug: string, articleData: any): Promise<IArticleRO> {
     const user = await this.userRepository.findOne(
       { id: userId },

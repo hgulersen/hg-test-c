@@ -11,6 +11,7 @@ import { Tag } from './src/tag/tag.entity';
 import { Article } from './src/article/article.entity';
 import { Comment } from './src/article/comment.entity';
 import { InitialMigration } from './src/migrations/InitialMigration';
+import { Migration20230916162849_AddUniqueConstraintToTag } from './src/migrations/Migration20230916162849_AddUniqueConstraintToTag';
 
 export default defineConfig({
   host: 'localhost',
@@ -19,10 +20,16 @@ export default defineConfig({
   password: 'conduit',
   dbName: 'conduit',
   migrations: {
+    path: join(__dirname, 'src', 'migrations'),
+    snapshot: false,
     migrationsList: [
       {
         name: 'InitialMigration',
         class: InitialMigration,
+      },
+      {
+        name: 'AddUniqueConstraintToTag',
+        class: Migration20230916162849_AddUniqueConstraintToTag,
       },
     ],
   },
