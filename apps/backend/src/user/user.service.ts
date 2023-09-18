@@ -8,6 +8,7 @@ import { CreateUserDto, LoginUserDto, UpdateUserDto } from './dto';
 import { User } from './user.entity';
 import { IUserRO } from './user.interface';
 import { UserRepository } from './user.repository';
+import { AuthorStatsDTO } from './dto/author-stats.dto';
 
 @Injectable()
 export class UserService {
@@ -85,6 +86,28 @@ export class UserService {
   async findByEmail(email: string): Promise<IUserRO> {
     const user = await this.userRepository.findOneOrFail({ email });
     return this.buildUserRO(user);
+  }
+
+  async getAuthorStats(): Promise<AuthorStatsDTO[]> {
+    const authorStats: any[] = await this.userRepository
+      .createQueryBuilder('u')
+      .select(['u.username', 'u.image'])
+      .addSelect('COUNT(a.id) as articleCount')
+      .addSelect('SUM(a.favorites_count) as totalLikes')
+      .addSelect('MIN(a.created_at) as firstArticleDate')
+      .leftJoin('u.articles', 'a')
+      .groupBy('u.id')
+      .execute();
+
+    return authorStats.map((stat) => {
+      const dto = new AuthorStatsDTO();
+      dto.username = stat.username;
+      dto.image = stat.image;
+      dto.articleCount = stat.articleCount;
+      dto.totalLikes = stat.totalLikes;
+      dto.firstArticleDate = stat.firstArticleDate;
+      return dto;
+    });
   }
 
   generateJWT(user: User) {

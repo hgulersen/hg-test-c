@@ -1,0 +1,18 @@
+<h1>Roster</h1>
+
+<table>
+  <tr>
+    <th>Username</th>
+    <th>Image</th>
+    <th>Article Count</th>
+    <th>Total Likes</th>
+    <th>First Article Date</th>
+  </tr>
+  <tr *ngFor="let stat of authorStats">
+    <td>{{ stat.username }}</td>
+    <td><img [src]="stat.image" alt="User Image" width="50"></td>
+    <td>{{ stat.articleCount }}</td>
+    <td>{{ stat.totalLikes }}</td>
+    <td>{{ stat.firstArticleDate | date }}</td>
+  </tr>
+</table>
