@@ -1,18 +1,23 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { AuthorStatsService } from './roster.service';
+import { Observable } from 'rxjs';
+import { RouterModule } from '@angular/router';
 
 @Component({
-  selector: 'app-roster',
+  selector: 'realworld-roster',
   templateUrl: './roster.component.html',
+  styleUrls: ['./roster.component.scss'],
+  standalone: true,
+  imports: [CommonModule, RouterModule],
+  providers: [AuthorStatsService],
 })
 export class RosterComponent implements OnInit {
-  authorStats: any[] = [];
+  authorStats$!: Observable<any[]>; // Declare it as an Observable
 
   constructor(private authorStatsService: AuthorStatsService) {}
 
   ngOnInit(): void {
-    this.authorStatsService.getAuthorStats().subscribe((data) => {
-      this.authorStats = data;
-    });
+    this.authorStats$ = this.authorStatsService.getAuthorStats(); // Assign the Observable to the property
   }
 }

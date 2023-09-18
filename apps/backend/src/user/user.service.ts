@@ -97,6 +97,7 @@ export class UserService {
       .addSelect('MIN(a.created_at) as firstArticleDate')
       .leftJoin('u.articles', 'a')
       .groupBy('u.id')
+      .orderBy({ 'SUM(a.favorites_count)': 'DESC' })
       .execute();
 
     return authorStats.map((stat) => {
