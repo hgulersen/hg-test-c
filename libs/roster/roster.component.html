@@ -8,7 +8,7 @@
     <th>First Article Date</th>
     <th>Profile Link</th>
   </tr>
-  <tr *ngFor="let stat of authorStats$ | async"> 
+  <tr *ngFor="let stat of authorStats$ | async">
     <td>{{ stat.username }}</td>
     <td>{{ stat.articleCount }}</td>
     <td>{{ stat.totalLikes }}</td>
