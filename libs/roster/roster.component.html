@@ -10,7 +10,7 @@
   </tr>
   <tr *ngFor="let stat of authorStats">
     <td>{{ stat.username }}</td>
-    <td><img [src]="stat.image" alt="User Image" width="50"></td>
+    <td><img [src]="stat.image" alt="User Image" width="50" /></td>
     <td>{{ stat.articleCount }}</td>
     <td>{{ stat.totalLikes }}</td>
     <td>{{ stat.firstArticleDate | date }}</td>
